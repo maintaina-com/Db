@@ -11,6 +11,10 @@
  * @package    Db
  * @subpackage UnitTests
  */
+namespace Horde\Db\Migration;
+use PHPUnit\Framework\TestCase;
+use \Horde_Db_Adapter_Pdo_Sqlite;
+use \Horde_Db_Migration_Base;
 
 require_once dirname(__DIR__) . '/fixtures/migrations/1_users_have_last_names1.php';
 require_once dirname(__DIR__) . '/fixtures/migrations/2_we_need_reminders1.php';
@@ -26,9 +30,9 @@ require_once dirname(__DIR__) . '/fixtures/migrations_with_decimal/1_give_me_big
  * @package    Db
  * @subpackage UnitTests
  */
-class Horde_Db_Migration_BaseTest extends PHPUnit_Framework_TestCase
+class BaseTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         try {
             $this->_conn = new Horde_Db_Adapter_Pdo_Sqlite(array(
@@ -95,10 +99,10 @@ class Horde_Db_Migration_BaseTest extends PHPUnit_Framework_TestCase
 
     public function testAddTable()
     {
+        $this->expectException('Horde_Db_Exception');       
+
         $e = null;
-        try {
-            $this->_conn->selectValues("SELECT * FROM reminders");
-        } catch (Exception $e) {}
+        $this->_conn->selectValues("SELECT * FROM reminders");
         $this->assertInstanceOf('Horde_Db_Exception', $e);
 
         $m = new WeNeedReminders1($this->_conn);
@@ -111,18 +115,17 @@ class Horde_Db_Migration_BaseTest extends PHPUnit_Framework_TestCase
 
         $m->down();
         $e = null;
-        try {
-            $this->_conn->selectValues("SELECT * FROM reminders");
-        } catch (Exception $e) {}
+
+        $this->_conn->selectValues("SELECT * FROM reminders");
         $this->assertInstanceOf('Horde_Db_Exception', $e);
     }
 
     public function testAddTableWithDecimals()
     {
+        $this->expectException('Horde_Db_Exception');       
+
         $e = null;
-        try {
-            $this->_conn->selectValues("SELECT * FROM big_numbers");
-        } catch (Exception $e) {}
+        $this->_conn->selectValues("SELECT * FROM big_numbers");
         $this->assertInstanceOf('Horde_Db_Exception', $e);
 
         $m = new GiveMeBigNumbers($this->_conn);
@@ -139,9 +142,8 @@ class Horde_Db_Migration_BaseTest extends PHPUnit_Framework_TestCase
 
         $m->down();
         $e = null;
-        try {
-            $this->_conn->selectValues("SELECT * FROM big_numbers");
-        } catch (Exception $e) {}
+
+        $this->_conn->selectValues("SELECT * FROM big_numbers");
         $this->assertInstanceOf('Horde_Db_Exception', $e);
     }
 

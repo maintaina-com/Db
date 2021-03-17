@@ -8,6 +8,8 @@
  * @package    Db
  * @subpackage UnitTests
  */
+namespace Horde\Db\Adapter\Oracle;
+use Horde_Db_Adapter_ColumnBase as ColumnBase;
 
 /**
  * @author     Jan Schneider <jan@horde.org>
@@ -17,7 +19,7 @@
  * @package    Db
  * @subpackage UnitTests
  */
-class Horde_Db_Adapter_Oracle_ColumnTest extends Horde_Db_Adapter_ColumnBase
+class ColumnTest extends ColumnBase
 {
     protected $_class = 'Horde_Db_Adapter_Oracle_Column';
 

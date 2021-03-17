@@ -1,5 +1,11 @@
 <?php
-class Horde_Db_StatementParserTest extends Horde_Test_Case
+
+namespace Horde\Db;
+use Horde_Test_Case;
+use \SplFileObject;
+use \Horde_Db_StatementParser;
+
+class StatementParserTest extends Horde_Test_Case
 {
     public function testParserFindsMultilineCreateStatement()
     {
