@@ -16,6 +16,7 @@ use Horde_Db_Adapter_TestBase as TestBase;
 use \PDO;
 use \Horde_Db_Adapter_Postgresql_ColumnDefinition;
 use \Horde_Db_Adapter_Postgresql_TestTableDefinition;
+use \Horde_Test_Case;
 
 /**
  * @author     Mike Naberezny <mike@maintainable.com>
