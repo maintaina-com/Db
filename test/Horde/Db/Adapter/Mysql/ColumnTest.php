@@ -11,6 +11,9 @@
  * @package    Db
  * @subpackage UnitTests
  */
+namespace Horde\Db\Adapter\Mysql;
+use Horde_Db_Adapter_ColumnBase as ColumnBase;
+use \Horde_Db_Adapter_Mysql_Column;
 
 /**
  * @author     Mike Naberezny <mike@maintainable.com>
@@ -22,7 +25,7 @@
  * @package    Db
  * @subpackage UnitTests
  */
-class Horde_Db_Adapter_Mysql_ColumnTest extends Horde_Db_Adapter_ColumnBase
+class ColumnTest extends ColumnBase
 {
     protected $_class = 'Horde_Db_Adapter_Mysql_Column';
 

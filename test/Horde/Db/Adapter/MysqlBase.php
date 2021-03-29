@@ -31,7 +31,7 @@ abstract class Horde_Db_Adapter_MysqlBase extends Horde_Db_Adapter_TestBase
         throw new LogicException('_available() must be implemented in a sub-class.');
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$_reason = 'The MySQL adapter is not available';
         if (static::_available()) {

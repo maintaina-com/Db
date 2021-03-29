@@ -12,6 +12,9 @@
  * @package    Db
  * @subpackage UnitTests
  */
+namespace Horde\Db\Adapter;
+use Horde_Test_Case;
+use Horde_Db_Adapter_MysqlBase as MysqlBase;
 
 /**
  * @author     Mike Naberezny <mike@maintainable.com>
@@ -24,7 +27,7 @@
  * @package    Db
  * @subpackage UnitTests
  */
-class Horde_Db_Adapter_MysqlTest extends Horde_Db_Adapter_MysqlBase
+class MysqlTest extends MysqlBase
 {
     protected static function _available()
     {

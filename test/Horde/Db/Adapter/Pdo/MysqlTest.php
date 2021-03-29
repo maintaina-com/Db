@@ -12,6 +12,10 @@
  * @package    Db
  * @subpackage UnitTests
  */
+namespace Horde\Db\Adapter\Pdo;
+use Horde_Db_Adapter_MysqlBase as MysqlBase;
+use \PDO;
+use \Horde_Test_Case;
 
 /**
  * @author     Mike Naberezny <mike@maintainable.com>
@@ -24,7 +28,7 @@
  * @package    Db
  * @subpackage UnitTests
  */
-class Horde_Db_Adapter_Pdo_MysqlTest extends Horde_Db_Adapter_MysqlBase
+class MysqlTest extends MysqlBase
 {
     protected static function _available()
     {

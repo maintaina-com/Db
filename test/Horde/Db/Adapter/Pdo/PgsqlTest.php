@@ -11,6 +11,12 @@
  * @package    Db
  * @subpackage UnitTests
  */
+namespace Horde\Db\Adapter\Pdo;
+use Horde_Db_Adapter_TestBase as TestBase;
+use \PDO;
+use \Horde_Db_Adapter_Postgresql_ColumnDefinition;
+use \Horde_Db_Adapter_Postgresql_TestTableDefinition;
+use \Horde_Test_Case;
 
 /**
  * @author     Mike Naberezny <mike@maintainable.com>
@@ -22,9 +28,9 @@
  * @package    Db
  * @subpackage UnitTests
  */
-class Horde_Db_Adapter_Pdo_PgsqlTest extends Horde_Db_Adapter_TestBase
+class PgsqlTest extends TestBase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$_reason = 'The pgsql adapter is not available';
         if (extension_loaded('pdo') &&

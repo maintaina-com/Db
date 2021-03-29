@@ -41,7 +41,7 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
         throw new LogicException('_getConnection() must be implemented in a sub-class.');
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (self::$_skip ||
             !($res = static::_getConnection())) {
@@ -56,7 +56,7 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
         $this->_dropTestTables();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->_conn) {
             // clean up
@@ -120,7 +120,7 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
         $this->assertGreaterThan(0, count(iterator_to_array($result)));
 
         foreach ($result as $row) break;
-        $this->assertInternalType('array', $row);
+        $this->assertIsArray($row);
         $this->assertEquals(1, $row['id']);
     }
 
@@ -134,7 +134,7 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
         $this->assertGreaterThan(0, count(iterator_to_array($result)));
 
         foreach ($result as $row) break;
-        $this->assertInternalType('array', $row);
+        $this->assertIsArray($row);
         $this->assertEquals(1, $row['id']);
     }
 
@@ -148,7 +148,7 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
         $this->assertGreaterThan(0, count(iterator_to_array($result)));
 
         foreach ($result as $row) break;
-        $this->assertInternalType('array', $row);
+        $this->assertIsArray($row);
         $this->assertEquals(1, $row['id']);
     }
 
@@ -158,7 +158,7 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
 
         $sql = "SELECT * FROM unit_tests WHERE id='1'";
         $result = $this->_conn->selectAll($sql);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertGreaterThan(0, count($result));
         $this->assertEquals(1, $result[0]['id']);
     }
@@ -635,6 +635,8 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
         );
 
         $this->_conn->removeIndex('users', array('name' => $index));
+
+        $this->markTestIncomplete();
     }
 
     public function testAddIndexDefault()
@@ -734,12 +736,8 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
 
     public function testIndexNameInvalid()
     {
-        try {
-            $name = $this->_conn->indexName('sports');
-        } catch (Horde_Db_Exception $e) {
-            return;
-        }
-        $this->fail("Adding an index with crappy options worked where it shouldn't have");
+        $this->expectException('Horde_Db_Exception');
+        $name = $this->_conn->indexName('sports');
     }
 
     public function testIndexNameBySingleColumn()
@@ -795,35 +793,29 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
 
     public function testAddColumnNotNullWithoutDefault()
     {
+        $this->expectException('Horde_Db_Exception');        
+
         $table = $this->_conn->createTable('testings');
         $table->column('foo', 'string');
         $table->end();
         $this->_conn->addColumn('testings', 'bar', 'string', array('null' => false, 'default' => ''));
 
-        try {
-            $this->_conn->insert("INSERT INTO testings (foo, bar) VALUES ('hello', NULL)");
-        } catch (Exception $e) {
-            return;
-        }
-        $this->fail('Expected exception wasn\'t raised');
+        $this->_conn->insert("INSERT INTO testings (foo, bar) VALUES ('hello', NULL)");
     }
 
     public function testAddColumnNotNullWithDefault()
     {
+        $this->expectException('Horde_Db_Exception');
+        
         $table = $this->_conn->createTable('testings');
-            $table->column('foo', 'string');
+        $table->column('foo', 'string');
         $table->end();
 
         $this->_conn->insert("INSERT INTO testings (id, foo) VALUES ('1', 'hello')");
 
         $this->_conn->addColumn('testings', 'bar', 'string', array('null' => false, 'default' => 'default'));
 
-        try {
-            $this->_conn->insert("INSERT INTO testings (id, foo, bar) VALUES (2, 'hello', NULL)");
-        } catch (Exception $e) {
-            return;
-        }
-        $this->fail('Expected exception wasn\'t raised');
+        $this->_conn->insert("INSERT INTO testings (id, foo, bar) VALUES (2, 'hello', NULL)");
     }
 
     public function testAddRemoveSingleField()
@@ -913,6 +905,7 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
      */
     public function testAutoIncrementWithTypeInTableAndColumnDefined()
     {
+        $this->expectException('LogicException');
         $table = $this->_conn->createTable('autoincrement', array('autoincrementKey' => 'foo'));
         $table->column('foo', 'integer');
         $table->column('bar', 'integer');
@@ -1125,60 +1118,72 @@ abstract class Horde_Db_Adapter_TestBase extends Horde_Test_Case
     public function testColumnConstruct()
     {
         self::$_columnTest->testConstruct();
+        $this->markTestIncomplete();
     }
 
     public function testColumnToSql()
     {
         self::$_columnTest->testToSql();
+        $this->markTestIncomplete();
     }
 
     public function testColumnToSqlLimit()
     {
         self::$_columnTest->testToSqlLimit();
+        $this->markTestIncomplete();
     }
 
     public function testColumnToSqlPrecisionScale()
     {
         self::$_columnTest->testToSqlPrecisionScale();
+        $this->markTestIncomplete();
     }
 
     public function testColumnToSqlNotNull()
     {
         self::$_columnTest->testToSqlNotNull();
+        $this->markTestIncomplete();
     }
 
     public function testColumnToSqlDefault()
     {
         self::$_columnTest->testToSqlDefault();
+        $this->markTestIncomplete();
     }
 
     public function testTableConstruct()
     {
         self::$_tableTest->testConstruct();
+        $this->markTestIncomplete();
     }
 
     public function testTableName()
     {
         self::$_tableTest->testName();
+        $this->markTestIncomplete();
     }
 
     public function testTableGetOptions()
     {
         self::$_tableTest->testGetOptions();
+        $this->markTestIncomplete();
     }
 
     public function testTablePrimaryKey()
     {
         self::$_tableTest->testPrimaryKey();
+        $this->markTestIncomplete();
     }
 
     public function testTableColumn()
     {
         self::$_tableTest->testColumn();
+        $this->markTestIncomplete();
     }
 
     public function testTableToSql()
     {
         self::$_tableTest->testToSql();
+        $this->markTestIncomplete();
     }
 }

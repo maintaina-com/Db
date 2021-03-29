@@ -11,6 +11,10 @@
  * @package    Db
  * @subpackage UnitTests
  */
+namespace Horde\Db\Migration;
+use Horde_Test_Case;
+use \Horde_Db_Adapter_Pdo_Sqlite;
+use \Horde_Db_Migration_Migrator;
 
 /**
  * @author     Mike Naberezny <mike@maintainable.com>
@@ -22,9 +26,9 @@
  * @package    Db
  * @subpackage UnitTests
  */
-class Horde_Db_Migration_MigratorTest extends Horde_Test_Case
+class MigratorTest extends Horde_Test_Case
 {
-    public function setUp()
+    public function setUp(): void
     {
         try {
             $this->_conn = new Horde_Db_Adapter_Pdo_Sqlite(array(
@@ -58,13 +62,13 @@ class Horde_Db_Migration_MigratorTest extends Horde_Test_Case
 
     public function testMigrator()
     {
+        $this->expectException('Horde_Db_Exception');    
+
         $columns = $this->_columnNames('users');
         $this->assertFalse(in_array('last_name', $columns));
 
         $e = null;
-        try {
-            $this->_conn->selectValues("SELECT * FROM reminders");
-        } catch (Exception $e) {}
+        $this->_conn->selectValues("SELECT * FROM reminders");
         $this->assertInstanceOf('Horde_Db_Exception', $e);
 
         $dir = dirname(__DIR__).'/fixtures/migrations/';
@@ -88,18 +92,16 @@ class Horde_Db_Migration_MigratorTest extends Horde_Test_Case
         $this->assertFalse(in_array('last_name', $columns));
 
         $e = null;
-        try {
-            $this->_conn->selectValues("SELECT * FROM reminders");
-        } catch (Exception $e) {}
+        $this->_conn->selectValues("SELECT * FROM reminders");
         $this->assertInstanceOf('Horde_Db_Exception', $e);
     }
 
     public function testOneUp()
     {
+        $this->expectException('Horde_Db_Exception');
+
         $e = null;
-        try {
-            $this->_conn->selectValues("SELECT * FROM reminders");
-        } catch (Exception $e) {}
+        $this->_conn->selectValues("SELECT * FROM reminders");
         $this->assertInstanceOf('Horde_Db_Exception', $e);
 
         $dir = dirname(__DIR__).'/fixtures/migrations/';
@@ -111,9 +113,7 @@ class Horde_Db_Migration_MigratorTest extends Horde_Test_Case
         $this->assertTrue(in_array('last_name', $columns));
 
         $e = null;
-        try {
-            $this->_conn->selectValues("SELECT * FROM reminders");
-        } catch (Exception $e) {}
+        $this->_conn->selectValues("SELECT * FROM reminders");
         $this->assertInstanceOf('Horde_Db_Exception', $e);
 
         $migrator->up(2);
@@ -150,6 +150,8 @@ class Horde_Db_Migration_MigratorTest extends Horde_Test_Case
 
     public function testMigratorGoingDownDueToVersionTarget()
     {
+        $this->expectException('Horde_Db_Exception');
+
         $dir = dirname(__DIR__).'/fixtures/migrations/';
         $migrator = new Horde_Db_Migration_Migrator($this->_conn, null, array('migrationsPath' => $dir));
 
@@ -178,16 +180,16 @@ class Horde_Db_Migration_MigratorTest extends Horde_Test_Case
 
     public function testWithDuplicates()
     {
-        try {
-            $dir = dirname(__DIR__).'/fixtures/migrations_with_duplicate/';
-            $migrator = new Horde_Db_Migration_Migrator($this->_conn, null, array('migrationsPath' => $dir));
-            $migrator->up();
-        } catch (Exception $e) { return; }
-        $this->fail('Expected exception wasn\'t raised');
+        $this->expectException('Horde_Db_Migration_Exception');
+        $dir = dirname(__DIR__).'/fixtures/migrations_with_duplicate/';
+        $migrator = new Horde_Db_Migration_Migrator($this->_conn, null, array('migrationsPath' => $dir));
+        $migrator->up();
     }
 
     public function testWithMissingVersionNumbers()
     {
+        $this->expectException('Horde_Db_Exception');
+
         $dir = dirname(__DIR__).'/fixtures/migrations_with_missing_versions/';
         $migrator = new Horde_Db_Migration_Migrator($this->_conn, null, array('migrationsPath' => $dir));
         $migrator->migrate(500);
@@ -197,9 +199,7 @@ class Horde_Db_Migration_MigratorTest extends Horde_Test_Case
         $this->assertEquals(2, $migrator->getCurrentVersion());
 
         $e = null;
-        try {
-            $this->_conn->selectValues("SELECT * FROM reminders");
-        } catch (Exception $e) {}
+        $this->_conn->selectValues("SELECT * FROM reminders");
         $this->assertInstanceOf('Horde_Db_Exception', $e);
 
         $columns = $this->_columnNames('users');

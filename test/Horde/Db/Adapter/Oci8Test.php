@@ -8,6 +8,10 @@
  * @package    Db
  * @subpackage UnitTests
  */
+namespace Horde\Db\Adapter;
+use Horde_Db_Adapter_TestBase as TestBase;
+use \Horde_Db_Adapter_Oracle_ColumnDefinition;
+use \Horde_Db_Adapter_Oracle_TestTableDefinition;
 
 /**
  * @author     Jan Schneider <jan@horde.org>
@@ -17,9 +21,9 @@
  * @package    Db
  * @subpackage UnitTests
  */
-class Horde_Db_Adapter_Oci8Test extends Horde_Db_Adapter_TestBase
+class Oci8Test extends TestBase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$_reason = 'The OCI8 adapter is not available';
         if (extension_loaded('oci8')) {
